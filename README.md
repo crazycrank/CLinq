@@ -6,7 +6,7 @@ This is a very early release. Most stuff should already work out of the box, but
 TBD
 
 # Mentions
-This project is strongly influenced by LinqKit but takes it a step further. Especially the concept and implementation of the ExpandableQuery is heavily influenced by LinqKit.
+This project is strongly influenced by [LinqKit](https://github.com/scottksmith95/LINQKit) but takes it a step further. Especially the concept and implementation of the ExpandableQuery is heavily influenced by LinqKit.
 
 # License 
 LinqOnSteroids is published under the MIT license. 
