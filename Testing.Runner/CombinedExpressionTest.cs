@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Runtime.CompilerServices;
+using System.Text;
+using System.Threading.Tasks;
 using LinqOnSteroids;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Testing.Database;
@@ -12,6 +15,8 @@ namespace Testing.Runner
     [TestClass]
     public class CombinedExpressionTest
     {
+        private int _employeeId;
+
         private static readonly Expression<Func<Employee, IEnumerable<Employee>>> GetSubordinates = e => e.Employees;
 
         private static readonly Expression<Func<Employee, bool>> YoungerThan1980 = e => e.Birthdate > new DateTime(1980, 1, 1);
@@ -25,10 +30,8 @@ namespace Testing.Runner
         private static readonly Expression<Func<IEnumerable<Employee>, IEnumerable<Project>>> GetProjectsForEmployees =
             employees => employees.SelectMany(e => e.EmployeeProjects).Select(ep => ep.Project).Distinct();
 
-        private int _employeeId;
-        private IEnumerable<Employee> _employeesYoungerThan1980AndMin2Projects;
-
         private IEnumerable<Project> _projectsOfManager1Subordinates;
+        private IEnumerable<Employee> _employeesYoungerThan1980AndMin2Projects;
 
 
         [TestInitialize]
@@ -36,18 +39,18 @@ namespace Testing.Runner
         {
             using (var dataContext = new DataContext())
             {
-                _employeeId = dataContext.Employees.First(e => e.Name == "Manager 1").Id;
+                this._employeeId = dataContext.Employees.First(e => e.Name == "Manager 1").Id;
                 // ReSharper disable once PossibleInvalidOperationException
-                _projectsOfManager1Subordinates = dataContext.Employees
-                                                             .Where(e => e.SuperiorId == _employeeId)
-                                                             .SelectMany(e => e.EmployeeProjects)
-                                                             .Select(ep => ep.Project)
-                                                             .Distinct()
-                                                             .ToList();
+                this._projectsOfManager1Subordinates = dataContext.Employees
+                                           .Where(e => e.SuperiorId == _employeeId)
+                                           .SelectMany(e => e.EmployeeProjects)
+                                           .Select(ep => ep.Project)
+                                           .Distinct()
+                                           .ToList();
 
-                _employeesYoungerThan1980AndMin2Projects = dataContext.Employees
-                                                                      .Where(e => (e.Birthdate > new DateTime(1980, 1, 1)) && (e.EmployeeProjects.Count > 2))
-                                                                      .ToList();
+                this._employeesYoungerThan1980AndMin2Projects = dataContext.Employees
+                                                                           .Where(e => e.Birthdate > new DateTime(1980, 1, 1) && e.EmployeeProjects.Count > 2)
+                                                                           .ToList();
             }
         }
 
@@ -58,7 +61,7 @@ namespace Testing.Runner
             {
                 var query = dataContext.Employees
                                        .AsExpandable()
-                                       .Where(e => e.Id == _employeeId)
+                                       .Where(e => e.Id ==_employeeId)
                                        .SelectMany(e => GetProjectsForEmployees.Pass(GetSubordinates.Pass(e)))
                                        .Distinct();
 
@@ -92,6 +95,7 @@ namespace Testing.Runner
                 Assert.AreEqual(_employeesYoungerThan1980AndMin2Projects.Count(), result.Count);
             }
         }
+
 
         [TestMethod]
         public void TestParameterRenaming()
@@ -128,7 +132,7 @@ namespace Testing.Runner
             }
         }
 
-        private IQueryable<Employee> MethodWithExpressionAsParam(IQueryable<Employee> query, Expression<Func<Employee, bool>> conditional)
+        private IQueryable<Employee> MethodWithExpressionAsParam(IQueryable<Employee> query, Expression<Func<Employee, bool>> conditional) 
             => query.Where(conditional);
     }
 }

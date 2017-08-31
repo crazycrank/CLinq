@@ -35,6 +35,7 @@ namespace LinqOnSteroids.Visitors
 
         protected override Expression VisitMember(MemberExpression node)
         {
+
             if (node.Expression is ConstantExpression c)
                 _result = (node.Member as FieldInfo)?.GetValue(c.Value);
 
