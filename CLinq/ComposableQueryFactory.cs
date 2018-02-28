@@ -6,7 +6,7 @@ using CLinq.ComposableQuery;
 
 namespace CLinq
 {
-    internal class ComposableQueryFactory<T>
+    internal static class ComposableQueryFactory<T>
     {
         internal static readonly Func<IQueryable<T>, ComposableQuery<T>> Create;
 
