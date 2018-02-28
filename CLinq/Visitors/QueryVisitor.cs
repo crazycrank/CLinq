@@ -5,7 +5,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace LinqOnSteroids.Visitors
+namespace CLinq.Visitors
 {
     internal class QueryVisitor : ExpressionVisitor
     {
@@ -39,7 +39,7 @@ namespace LinqOnSteroids.Visitors
 
         protected override Expression VisitMethodCall(MethodCallExpression node)
         {
-            if (node.Method.Name == nameof(LinqOnSteroidsExtensions.Pass) && node.Method.DeclaringType == typeof(LinqOnSteroidsExtensions))
+            if (node.Method.Name == nameof(CLinqExtensions.Pass) && node.Method.DeclaringType == typeof(CLinqExtensions))
             {
                 LambdaExpression lambda;
                 switch (node.Arguments[0])

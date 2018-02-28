@@ -3,15 +3,15 @@ using System.Data.Entity.Infrastructure;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace LinqOnSteroids.ExpandableQuery
+namespace CLinq.ComposableQuery
 {
     /// <summary> Class for async-await style list enumeration support (e.g. .ToListAsync())</summary>
-    public sealed class ExpandableDbAsyncEnumerator<T> : IDbAsyncEnumerator<T>
+    public sealed class ComposableDbAsyncEnumerator<T> : IDbAsyncEnumerator<T>
     {
         private readonly IEnumerator<T> _inner;
 
         /// <summary> Class for async-await style list enumeration support (e.g. .ToListAsync())</summary>
-        public ExpandableDbAsyncEnumerator(IEnumerator<T> inner) 
+        public ComposableDbAsyncEnumerator(IEnumerator<T> inner) 
             => _inner = inner;
 
         /// <summary> Dispose, .NET using-pattern </summary>

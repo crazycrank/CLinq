@@ -69,9 +69,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\LinqOnSteroids\LinqOnSteroids.csproj">
+    <ProjectReference Include="..\CLinq\CLinq.csproj">
       <Project>{BE1530A2-64EE-48DC-ACE6-0555446957C7}</Project>
-      <Name>LinqOnSteroids</Name>
+      <Name>CLinq</Name>
     </ProjectReference>
     <ProjectReference Include="..\Testing.Database\Testing.Database.csproj">
       <Project>{5A6366E2-38B0-4CB7-A2A8-B8E997BAC721}</Project>

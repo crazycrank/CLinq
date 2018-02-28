@@ -5,20 +5,20 @@ using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Linq.Expressions;
 
-namespace LinqOnSteroids.ExpandableQuery
+namespace CLinq.ComposableQuery
 {
     /// <summary>
     ///     An IQueryable wrapper that allows us to visit the query's expression tree just before LINQ to SQL gets to it.
     ///     This is based on the excellent work of Tomas Petricek: http://tomasp.net/blog/linq-expand.aspx
     /// </summary>
-    public class ExpandableQuery<T> : IOrderedQueryable<T>, IDbAsyncEnumerable<T>
+    public class ComposableQuery<T> : IOrderedQueryable<T>, IDbAsyncEnumerable<T>
     {
-        private readonly ExpandableQueryProvider<T> _provider;
+        private readonly ComposableQueryProvider<T> _provider;
 
-        internal ExpandableQuery(IQueryable<T> inner)
+        internal ComposableQuery(IQueryable<T> inner)
         {
             InnerQuery = inner;
-            _provider = new ExpandableQueryProvider<T>(this);
+            _provider = new ComposableQueryProvider<T>(this);
         }
 
         internal IQueryable<T> InnerQuery // Original query, that we're wrapping
@@ -35,7 +35,7 @@ namespace LinqOnSteroids.ExpandableQuery
                 case IDbAsyncEnumerable<T> asyncEnumerable:
                     return asyncEnumerable.GetAsyncEnumerator();
                 default:
-                    return new ExpandableDbAsyncEnumerator<T>(InnerQuery.GetEnumerator());
+                    return new ComposableDbAsyncEnumerator<T>(InnerQuery.GetEnumerator());
             }
         }
 

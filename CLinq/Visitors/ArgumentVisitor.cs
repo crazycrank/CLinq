@@ -1,7 +1,7 @@
 ﻿using System.Linq.Expressions;
 using System.Reflection;
 
-namespace LinqOnSteroids.Visitors
+namespace CLinq.Visitors
 {
     internal class ArgumentVisitor : ExpressionVisitor
     {

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using LinqOnSteroids;
+using CLinq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Testing.Database;
 using Testing.Database.Model;
@@ -26,7 +26,7 @@ namespace Testing.Runner
             using (var dataContext = new DataContext())
             {
                 var query = dataContext.Employees
-                                       .AsExpandable()
+                                       .AsComposable()
                                        .Where(e => e.Id == employeeId)
                                        .Select(e => e.GetSuperior().Pass(e));
 
@@ -50,7 +50,7 @@ namespace Testing.Runner
             using (var dataContext = new DataContext())
             {
                 var query = dataContext.Customers
-                                       .AsExpandable()
+                                       .AsComposable()
                                        .SelectMany(c => c.GetCustomerProjectsWithMinValue(minValue).Pass(c))
                                        .Distinct();
 

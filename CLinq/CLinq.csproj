@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{BE1530A2-64EE-48DC-ACE6-0555446957C7}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>LinqOnSteroids</RootNamespace>
-    <AssemblyName>LinqOnSteroids</AssemblyName>
+    <RootNamespace>CLinq</RootNamespace>
+    <AssemblyName>CLinq</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -22,6 +22,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>7.2</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -53,13 +54,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ExpandableQuery\ExpandableQueryOfClass.cs" />
-    <Compile Include="ExpandableQuery\ExpandableQueryProvider.cs" />
+    <Compile Include="ComposableQueryFactory.cs" />
+    <Compile Include="ComposableQuery\ComposableQueryOfClass.cs" />
+    <Compile Include="ComposableQuery\ComposableQueryProvider.cs" />
     <Compile Include="Visitors\ArgumentVisitor.cs" />
-    <Compile Include="LinqOnSteroidsConfiguration.cs" />
-    <Compile Include="LinqOnSteroidsExtensions.cs" />
-    <Compile Include="ExpandableQuery\ExpandableDbAsyncEnumerator.cs" />
-    <Compile Include="ExpandableQuery\ExpandableQuery.cs" />
+    <Compile Include="CLinqConfiguration.cs" />
+    <Compile Include="CLinqExtensions.cs" />
+    <Compile Include="ComposableQuery\ComposableDbAsyncEnumerator.cs" />
+    <Compile Include="ComposableQuery\ComposableQuery.cs" />
     <Compile Include="Visitors\QueryVisitor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

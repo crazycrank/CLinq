@@ -1,8 +1,7 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using LinqOnSteroids;
+using CLinq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Testing.Database;
 using Testing.Database.Model;
@@ -25,7 +24,7 @@ namespace Testing.Runner
 
             using (var dataContext = new DataContext())
             {
-                var q = dataContext.Employees.AsExpandable().Where(e => _sameYearOfBirth.Pass(e1, e));
+                var q = dataContext.Employees.AsComposable().Where(e => _sameYearOfBirth.Pass(e1, e));
                 var result = q.ToList();
 
                 Assert.AreEqual(10, result.Count);

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Testing.Database.Model
+﻿namespace Testing.Database.Model
 {
     public class EmployeeProject
     {
