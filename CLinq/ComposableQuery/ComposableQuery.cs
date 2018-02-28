@@ -21,13 +21,28 @@ namespace CLinq.ComposableQuery
             _provider = new ComposableQueryProvider<T>(this);
         }
 
-        internal IQueryable<T> InnerQuery // Original query, that we're wrapping
+        internal IQueryable<T> InnerQuery 
         {
             get;
         }
 
 
-        /// <summary> Enumerator for async-await </summary>
+        /// <inheritdoc />
+        Expression IQueryable.Expression => InnerQuery.Expression;
+
+        /// <inheritdoc />
+        Type IQueryable.ElementType => typeof(T);
+
+        /// <inheritdoc />
+        IQueryProvider IQueryable.Provider => _provider;
+
+        /// <inheritdoc />
+        public IEnumerator<T> GetEnumerator() => InnerQuery.GetEnumerator();
+
+        /// <inheritdoc />
+        IEnumerator IEnumerable.GetEnumerator() => InnerQuery.GetEnumerator();
+
+        /// <inheritdoc />
         public IDbAsyncEnumerator<T> GetAsyncEnumerator()
         {
             switch (InnerQuery)
@@ -39,20 +54,10 @@ namespace CLinq.ComposableQuery
             }
         }
 
+        /// <inheritdoc />
         IDbAsyncEnumerator IDbAsyncEnumerable.GetAsyncEnumerator() => GetAsyncEnumerator();
 
-        Expression IQueryable.Expression => InnerQuery.Expression;
-
-        Type IQueryable.ElementType => typeof(T);
-
-        IQueryProvider IQueryable.Provider => _provider;
-
-        /// <summary> IQueryable enumeration </summary>
-        public IEnumerator<T> GetEnumerator() => InnerQuery.GetEnumerator();
-
-        IEnumerator IEnumerable.GetEnumerator() => InnerQuery.GetEnumerator();
-
-        /// <summary> IQueryable string presentation.  </summary>
+        /// <inheritdoc />
         public override string ToString() => InnerQuery.ToString();
     }
 }
