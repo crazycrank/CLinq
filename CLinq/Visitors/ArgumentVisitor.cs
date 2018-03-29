@@ -1,31 +1,35 @@
 ﻿using System.Linq.Expressions;
 using System.Reflection;
+using JetBrains.Annotations;
 
-namespace CLinq.Visitors
+namespace CLinq.Core.Visitors
 {
+    /// <summary>
+    /// Allows for composable queries to resolve non-expression parameters before composing the query
+    /// </summary>
     internal class ArgumentVisitor : ExpressionVisitor
     {
-        private readonly Expression _expression;
+        [CanBeNull]
         private object _result;
 
-        public ArgumentVisitor(Expression expression) => 
-            _expression = expression;
-
-
-        public object Evaluate()
+        [CanBeNull]
+        public object Evaluate([CanBeNull] Expression expression)
         {
-            if (_result == null)
-                Visit(_expression);
-            return _result;
+            if (expression is null)
+                return null;
+
+            this.Visit(expression);
+            return this._result;
         }
 
-        public Expression EvaluateAsExpression()
+        [NotNull]
+        public Expression EvaluateAsExpression([CanBeNull] Expression expression)
         {
-            var result = Evaluate();
+            var result = this.Evaluate(expression);
             switch (result)
             {
-                case Expression expression:
-                    return expression;
+                case Expression exp:
+                    return exp;
                 case object o:
                     return Expression.Constant(o, o.GetType());
                 case null:
@@ -35,17 +39,15 @@ namespace CLinq.Visitors
 
         protected override Expression VisitMember(MemberExpression node)
         {
-
             if (node.Expression is ConstantExpression c)
-                _result = (node.Member as FieldInfo)?.GetValue(c.Value);
+                this._result = (node.Member as FieldInfo)?.GetValue(c.Value);
 
             return node;
         }
 
         protected override Expression VisitConstant(ConstantExpression node)
         {
-            _result = node.Value;
-
+            this._result = node.Value;
             return node;
         }
 
@@ -55,13 +57,10 @@ namespace CLinq.Visitors
             for (var index = 0; index < node.Arguments.Count; index++)
             {
                 var nodeArgument = node.Arguments[index];
-                var argumentVisitor = new ArgumentVisitor(nodeArgument);
-                arguments[index] = argumentVisitor.Evaluate();
+                arguments[index] = new ArgumentVisitor().Evaluate(nodeArgument);
             }
 
-            var objectVisitor = new ArgumentVisitor(node.Object);
-            objectVisitor.Visit(node.Object);
-            _result = node.Method.Invoke(objectVisitor.Evaluate(), arguments);
+            this._result = node.Method.Invoke(new ArgumentVisitor().Evaluate(node.Object), arguments);
 
             return node;
         }

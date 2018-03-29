@@ -1,54 +1,52 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using CLinq.Core.ComposableQuery;
+using JetBrains.Annotations;
 
-namespace CLinq.Visitors
+namespace CLinq.Core.Visitors
 {
+    /// <summary>
+    /// Visits a query and merges all methods, which are marked with <see cref="ComposableQueryExtensions.Pass{TResult}"/>, into the base query
+    /// </summary>
     internal class QueryVisitor : ExpressionVisitor
     {
-        private readonly IDictionary<ParameterExpression, Expression> _parametersToReplace;
+        [NotNull]
+        private readonly IDictionary<ParameterExpression, Expression> _parametersToReplace = new Dictionary<ParameterExpression, Expression>();
 
         internal QueryVisitor()
+        { }
+
+        private QueryVisitor([NotNull] IEnumerable<(ParameterExpression parameter, Expression replaceBy)> replaceParameters)
         {
-        }
+            if (replaceParameters is null)
+                throw new ArgumentNullException(nameof(replaceParameters));
 
-
-        private QueryVisitor(IEnumerable<ParameterExpression> parametersToReplace, IEnumerable<Expression> replaceByExpression)
-        {
-            var parameterExpressions = parametersToReplace as ParameterExpression[] ?? parametersToReplace.ToArray();
-            var byExpression = replaceByExpression as Expression[] ?? replaceByExpression.ToArray();
-
-            if(parameterExpressions.Length != byExpression.Length)
-                throw new Exception(); //Todo Exception Concept
-
-            _parametersToReplace = new Dictionary<ParameterExpression, Expression>();
-
-            for (var i = 0; i < parameterExpressions.Length; i++)
+            foreach (var (parameter, replaceBy) in replaceParameters)
             {
-                _parametersToReplace[parameterExpressions[i]] = byExpression[i];
+                this._parametersToReplace[parameter] = replaceBy;
             }
         }
 
-        protected override Expression VisitParameter(ParameterExpression node) =>
-            _parametersToReplace?.ContainsKey(node) ?? false
-                ? Visit(_parametersToReplace[node])
-                : base.VisitParameter(node);
+        protected override Expression VisitParameter(ParameterExpression node)
+            => this._parametersToReplace.ContainsKey(node)
+                   ? this.Visit(this._parametersToReplace[node]) ?? throw new InvalidOperationException()
+                   : base.VisitParameter(node);
 
         protected override Expression VisitMethodCall(MethodCallExpression node)
         {
-            if (node.Method.Name == nameof(CLinqExtensions.Pass) && node.Method.DeclaringType == typeof(CLinqExtensions))
+            if (node.Method.Name == nameof(ComposableQueryExtensions.Pass) && node.Method.DeclaringType == typeof(ComposableQueryExtensions))
             {
                 LambdaExpression lambda;
                 switch (node.Arguments[0])
                 {
                     case MemberExpression e:
-                        lambda = ParseMemberExpression(e) as LambdaExpression;
+                        lambda = this.ParseMemberExpression(e) as LambdaExpression;
                         break;
                     case MethodCallExpression e:
-                        lambda = ParseMethodCallExpression(e) as LambdaExpression;
+                        lambda = this.ParseMethodCallExpression(e) as LambdaExpression;
                         break;
                     case ConstantExpression e when e.Value is LambdaExpression t:
                         lambda = t;
@@ -60,44 +58,46 @@ namespace CLinq.Visitors
                         throw new ArgumentOutOfRangeException();
                 }
 
-                Debug.Assert(lambda != null);
+                if (lambda is null)
+                {
+                    throw new InvalidOperationException();
+                }
 
-                return new QueryVisitor(lambda.Parameters, node.Arguments.Skip(1)).Visit(lambda.Body);
+                return new QueryVisitor(lambda.Parameters.Zip(node.Arguments.Skip(1),
+                                                              (parameter, replaceBy) => (parameter, replaceBy)))
+                           .Visit(lambda.Body)
+                       ?? throw new InvalidOperationException();
             }
 
             return base.VisitMethodCall(node);
         }
 
-        private Expression ParseMemberExpression(MemberExpression memberExpression)
+        private Expression ParseMemberExpression([NotNull] MemberExpression memberExpression)
         {
+            var argumentVisitor = new ArgumentVisitor();
             switch (memberExpression)
             {
                 case var m when m.NodeType == ExpressionType.MemberAccess
-                                             && m.Member is FieldInfo fi:
-                {
-                    var argumentVisitor = new ArgumentVisitor(memberExpression.Expression);
-                    return Visit(fi.GetValue(argumentVisitor.Evaluate()) as Expression);
-                }
+                                && m.Member is FieldInfo fi:
+                    return this.Visit(fi.GetValue(argumentVisitor.Evaluate(memberExpression.Expression)) as Expression);
+
                 case var m when m.NodeType == ExpressionType.MemberAccess
-                                             && m.Member is PropertyInfo pi:
-                {
-                    var argumentVisitor = new ArgumentVisitor(memberExpression.Expression);
-                    var result = argumentVisitor.Evaluate();
-                    return Visit(pi.GetValue(result) as Expression);
-                }
+                                && m.Member is PropertyInfo pi:
+                    return this.Visit(pi.GetValue(argumentVisitor.Evaluate(memberExpression.Expression)) as Expression);
+
                 default:
                     return Expression.Constant(null);
             }
         }
 
-        private Expression ParseMethodCallExpression(MethodCallExpression methodCallExpression)
+        private Expression ParseMethodCallExpression([NotNull] MethodCallExpression methodCallExpression)
         {
             if (!typeof(Expression).IsAssignableFrom(methodCallExpression.Method.ReturnType))
             {
-                throw new Exception(); //TODO exception concept
+                throw new InvalidOperationException();
             }
-            var visitor = new ArgumentVisitor(methodCallExpression);
-            return Visit(visitor.EvaluateAsExpression());
+
+            return this.Visit(new ArgumentVisitor().EvaluateAsExpression(methodCallExpression));
         }
     }
 }
