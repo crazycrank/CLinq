@@ -7,8 +7,8 @@
     <PackageReference Include="EntityFramework" Version="6.2.0" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CLinq.Core\CLinq.Core.csproj" />
     <ProjectReference Include="..\CLinq.EntityFramework\CLinq.EntityFramework.csproj" />
-    <ProjectReference Include="..\CLinq\CLinq.Core.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

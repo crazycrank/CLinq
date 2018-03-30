@@ -7,7 +7,7 @@ namespace CLinq.Core.Visitors
     /// <summary>
     /// Allows for composable queries to resolve non-expression parameters before composing the query
     /// </summary>
-    internal class ArgumentVisitor : ExpressionVisitor
+    internal class ArgumentEvaluator : ExpressionVisitor
     {
         [CanBeNull]
         private object _result;
@@ -57,10 +57,10 @@ namespace CLinq.Core.Visitors
             for (var index = 0; index < node.Arguments.Count; index++)
             {
                 var nodeArgument = node.Arguments[index];
-                arguments[index] = new ArgumentVisitor().Evaluate(nodeArgument);
+                arguments[index] = new ArgumentEvaluator().Evaluate(nodeArgument);
             }
 
-            this._result = node.Method.Invoke(new ArgumentVisitor().Evaluate(node.Object), arguments);
+            this._result = node.Method.Invoke(new ArgumentEvaluator().Evaluate(node.Object), arguments);
 
             return node;
         }

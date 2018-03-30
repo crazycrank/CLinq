@@ -3,11 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27130.2036
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Testing.Database", "Testing.Database\Testing.Database.csproj", "{5A6366E2-38B0-4CB7-A2A8-B8E997BAC721}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Testing.Database", "Testing.Database\Testing.Database.csproj", "{5A6366E2-38B0-4CB7-A2A8-B8E997BAC721}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Testing.Runner", "Testing.Runner\Testing.Runner.csproj", "{3F2A8B24-8E40-41D3-84B7-79E9C51BD797}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CLinq.Core", "CLinq\CLinq.Core.csproj", "{BE1530A2-64EE-48DC-ACE6-0555446957C7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Testing.Runner", "Testing.Runner\Testing.Runner.csproj", "{3F2A8B24-8E40-41D3-84B7-79E9C51BD797}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Testing", "Testing", "{26591ACF-600E-413B-B6A7-1AF432465350}"
 EndProject
@@ -17,7 +15,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionIt
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CLinq.EntityFramework", "CLinq.EntityFramework\CLinq.EntityFramework.csproj", "{BAA369B1-0A57-4FB6-8945-D4291E4CD311}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CLinq.EntityFramework", "CLinq.EntityFramework\CLinq.EntityFramework.csproj", "{BAA369B1-0A57-4FB6-8945-D4291E4CD311}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CLinq.Core", "CLinq.Core\CLinq.Core.csproj", "{4D05BCD4-E92B-4169-BE25-B62E3D793500}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,14 +33,14 @@ Global
 		{3F2A8B24-8E40-41D3-84B7-79E9C51BD797}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3F2A8B24-8E40-41D3-84B7-79E9C51BD797}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3F2A8B24-8E40-41D3-84B7-79E9C51BD797}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BE1530A2-64EE-48DC-ACE6-0555446957C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BE1530A2-64EE-48DC-ACE6-0555446957C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BE1530A2-64EE-48DC-ACE6-0555446957C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BE1530A2-64EE-48DC-ACE6-0555446957C7}.Release|Any CPU.Build.0 = Release|Any CPU
 		{BAA369B1-0A57-4FB6-8945-D4291E4CD311}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{BAA369B1-0A57-4FB6-8945-D4291E4CD311}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BAA369B1-0A57-4FB6-8945-D4291E4CD311}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BAA369B1-0A57-4FB6-8945-D4291E4CD311}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4D05BCD4-E92B-4169-BE25-B62E3D793500}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D05BCD4-E92B-4169-BE25-B62E3D793500}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4D05BCD4-E92B-4169-BE25-B62E3D793500}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4D05BCD4-E92B-4169-BE25-B62E3D793500}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -3,12 +3,12 @@ using System.Data.Entity.Infrastructure;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
-using CLinq.Core.ComposableQuery.Core;
+using CLinq.Core;
 using JetBrains.Annotations;
 
-namespace CLinq.Core.ComposableQuery.Entity
+namespace CLinq.EntityFramework
 {
-    internal class DbAsyncComposableQueryProvider<T> : ComposableQueryProvider<T>, IDbAsyncQueryProvider
+    public class DbAsyncComposableQueryProvider<T> : ComposableQueryProvider<T>, IDbAsyncQueryProvider
     {
         internal DbAsyncComposableQueryProvider([NotNull] DbAsyncComposableQuery<T> query)
             : base(query)

@@ -5,24 +5,22 @@ using System.Linq;
 using System.Linq.Expressions;
 using JetBrains.Annotations;
 
-namespace CLinq.Core.ComposableQuery.Core
+namespace CLinq.Core
 {
-    /// <summary>
-    ///     An IQueryable wrapper that allows us to visit and manipulate the query's expression tree just before LINQ to SQL gets to it.
-    /// </summary>
+    /// <inheritdoc />
     public class ComposableQuery<T> : IOrderedQueryable<T>
     {
         [NotNull]
-        private protected ComposableQueryProvider<T> InnerProvider;
+        protected ComposableQueryProvider<T> InnerProvider;
 
-        internal ComposableQuery([NotNull] IQueryable<T> inner)
+        public ComposableQuery([NotNull] IQueryable<T> inner)
         {
             this.InnerQuery = inner ?? throw new ArgumentNullException(nameof(inner));
             this.InnerProvider = new ComposableQueryProvider<T>(this);
         }
 
         [NotNull]
-        internal IQueryable<T> InnerQuery 
+        public IQueryable<T> InnerQuery 
         {
             get;
         }

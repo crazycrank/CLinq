@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Linq.Expressions;
-using CLinq.Core.ComposableQuery;
+using CLinq.Core;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Testing.Database;
 using Testing.Database.Model;

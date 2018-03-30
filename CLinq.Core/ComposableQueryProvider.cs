@@ -3,13 +3,14 @@ using System.Linq;
 using System.Linq.Expressions;
 using JetBrains.Annotations;
 
-namespace CLinq.Core.ComposableQuery.Core
+namespace CLinq.Core
 {
-    internal class ComposableQueryProvider<T> : IQueryProvider
+    public class ComposableQueryProvider<T> : IQueryProvider
     {
         [NotNull]
-        private protected readonly ComposableQuery<T> Query;
-        internal ComposableQueryProvider([NotNull] ComposableQuery<T> query) => this.Query = query;
+        protected virtual ComposableQuery<T> Query { get; }
+
+        public ComposableQueryProvider([NotNull] ComposableQuery<T> query) => this.Query = query;
 
         IQueryable<TElement> IQueryProvider.CreateQuery<TElement>(Expression expression)
         {
@@ -36,13 +37,12 @@ namespace CLinq.Core.ComposableQuery.Core
         }
         
         [NotNull]
-        private protected Expression ComposeExpression([NotNull] Expression expression)
+        protected virtual Expression ComposeExpression([NotNull] Expression expression)
         {
             if (expression is null)
                 throw new ArgumentNullException(nameof(expression));
-            var composed = expression.Compose();
-            var optimized = CLinqConfiguration.QueryOptimizer(composed);
-            return optimized ?? throw new InvalidOperationException();
+
+            return expression.Compose();
         }
     }
 }

@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Linq;
 using System.Linq.Expressions;
-using CLinq.Core.ComposableQuery.Core;
 using CLinq.Core.Visitors;
 using JetBrains.Annotations;
 
-namespace CLinq.Core.ComposableQuery
+namespace CLinq.Core
 {
     /// <summary>
     /// Extensions methods used for composable queries. 
     /// </summary>
-    public static class ComposableQueryExtensions
+    public static class Extensions
     {
         /// <summary>
         /// Marks an parameterless expression for LinqOnSteroids, so that it will be composed when the query will be called
@@ -271,7 +270,7 @@ namespace CLinq.Core.ComposableQuery
             if (expression is null)
                 throw new ArgumentNullException(nameof(expression));
 
-            return (Expression<T>) new QueryVisitor().Visit(expression) ?? throw new InvalidOperationException();
+            return (Expression<T>) new QueryComposer().Visit(expression) ?? throw new InvalidOperationException();
         }
 
         [NotNull]
@@ -280,7 +279,7 @@ namespace CLinq.Core.ComposableQuery
             if (expression is null)
                 throw new ArgumentNullException(nameof(expression));
 
-            return new QueryVisitor().Visit(expression) ?? throw new InvalidOperationException();
+            return new QueryComposer().Visit(expression) ?? throw new InvalidOperationException();
         }
     }
 }

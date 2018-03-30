@@ -3,23 +3,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using CLinq.Core.ComposableQuery;
 using JetBrains.Annotations;
 
 namespace CLinq.Core.Visitors
 {
     /// <summary>
-    /// Visits a query and merges all methods, which are marked with <see cref="ComposableQueryExtensions.Pass{TResult}"/>, into the base query
+    /// Visits a query and merges all methods, which are marked with <see cref="Extensions.Pass{TResult}"/>, into the base query
     /// </summary>
-    internal class QueryVisitor : ExpressionVisitor
+    internal class QueryComposer : ExpressionVisitor
     {
         [NotNull]
         private readonly IDictionary<ParameterExpression, Expression> _parametersToReplace = new Dictionary<ParameterExpression, Expression>();
 
-        internal QueryVisitor()
+        internal QueryComposer()
         { }
 
-        private QueryVisitor([NotNull] IEnumerable<(ParameterExpression parameter, Expression replaceBy)> replaceParameters)
+        private QueryComposer([NotNull] IEnumerable<(ParameterExpression parameter, Expression replaceBy)> replaceParameters)
         {
             if (replaceParameters is null)
                 throw new ArgumentNullException(nameof(replaceParameters));
@@ -37,7 +36,7 @@ namespace CLinq.Core.Visitors
 
         protected override Expression VisitMethodCall(MethodCallExpression node)
         {
-            if (node.Method.Name == nameof(ComposableQueryExtensions.Pass) && node.Method.DeclaringType == typeof(ComposableQueryExtensions))
+            if (node.Method.Name == nameof(Extensions.Pass) && node.Method.DeclaringType == typeof(Extensions))
             {
                 LambdaExpression lambda;
                 switch (node.Arguments[0])
@@ -63,7 +62,7 @@ namespace CLinq.Core.Visitors
                     throw new InvalidOperationException();
                 }
 
-                return new QueryVisitor(lambda.Parameters.Zip(node.Arguments.Skip(1),
+                return new QueryComposer(lambda.Parameters.Zip(node.Arguments.Skip(1),
                                                               (parameter, replaceBy) => (parameter, replaceBy)))
                            .Visit(lambda.Body)
                        ?? throw new InvalidOperationException();
@@ -74,7 +73,7 @@ namespace CLinq.Core.Visitors
 
         private Expression ParseMemberExpression([NotNull] MemberExpression memberExpression)
         {
-            var argumentVisitor = new ArgumentVisitor();
+            var argumentVisitor = new ArgumentEvaluator();
             switch (memberExpression)
             {
                 case var m when m.NodeType == ExpressionType.MemberAccess
@@ -92,12 +91,12 @@ namespace CLinq.Core.Visitors
 
         private Expression ParseMethodCallExpression([NotNull] MethodCallExpression methodCallExpression)
         {
-            if (!typeof(Expression).IsAssignableFrom(methodCallExpression.Method.ReturnType))
+            if (!(typeof(Expression).GetTypeInfo()?.IsAssignableFrom(methodCallExpression.Method.ReturnType.GetTypeInfo()) ?? false))
             {
                 throw new InvalidOperationException();
             }
 
-            return this.Visit(new ArgumentVisitor().EvaluateAsExpression(methodCallExpression));
+            return this.Visit(new ArgumentEvaluator().EvaluateAsExpression(methodCallExpression));
         }
     }
 }
