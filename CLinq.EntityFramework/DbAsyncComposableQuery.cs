@@ -1,4 +1,5 @@
-﻿using System.Data.Entity.Infrastructure;
+﻿using System;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
 using CLinq.Core;
 using JetBrains.Annotations;
@@ -6,12 +7,13 @@ using JetBrains.Annotations;
 namespace CLinq.EntityFramework
 {
     /// <inheritdoc cref="IDbAsyncEnumerable{T}"/>
-    public class DbAsyncComposableQuery<T> : ComposableQuery<T>, IDbAsyncEnumerable<T>
+    public class DbAsyncComposableQuery<T, TProvider> : ComposableQuery<T, TProvider>, IDbAsyncEnumerable<T>
+        where TProvider : ComposableQueryProvider<T>
     {
         internal DbAsyncComposableQuery([NotNull] IQueryable<T> innerQuery)
             : base(innerQuery)
         {
-            this.InnerProvider = new DbAsyncComposableQueryProvider<T>(this);
+            this.InnerProvider = (TProvider)Activator.CreateInstance(typeof(TProvider), this);
         }
 
         /// <inheritdoc />

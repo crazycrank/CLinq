@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Linq.Expressions;
+using CLinq.Core.Exceptions;
 using CLinq.Core.Visitors;
 using JetBrains.Annotations;
 
@@ -11,6 +12,15 @@ namespace CLinq.Core
     /// </summary>
     public static class Extensions
     {
+        private static QueryComposerFactory _factory;
+
+        [NotNull]
+        public static QueryComposerFactory Factory
+        {
+            private get => _factory ?? throw new CLinqNotInitializedException();
+            set => _factory = value;
+        }
+
         /// <summary>
         /// Marks an parameterless expression for LinqOnSteroids, so that it will be composed when the query will be called
         /// </summary>
@@ -255,14 +265,7 @@ namespace CLinq.Core
         /// <returns></returns>
         [NotNull]
         public static IQueryable<T> AsComposable<T>([NotNull] this IQueryable<T> query)
-        {
-            if (query is null)
-                throw new ArgumentNullException(nameof(query));
-
-            return query is ComposableQuery<T> composableQuery
-                       ? composableQuery
-                       : new ComposableQuery<T>(query);
-        }
+            => Factory.GetComposableQuery(query);
 
         [NotNull]
         public static Expression<T> Compose<T>([NotNull] this Expression<T> expression)

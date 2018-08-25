@@ -8,22 +8,20 @@ using JetBrains.Annotations;
 namespace CLinq.Core
 {
     /// <inheritdoc />
-    public class ComposableQuery<T> : IOrderedQueryable<T>
+    public class ComposableQuery<T, TProvider> : IOrderedQueryable<T> 
+        where TProvider : ComposableQueryProvider<T>
     {
         [NotNull]
-        protected ComposableQueryProvider<T> InnerProvider;
+        protected TProvider InnerProvider;
 
-        public ComposableQuery([NotNull] IQueryable<T> inner)
+        public ComposableQuery([NotNull] IQueryable<T> query)
         {
-            this.InnerQuery = inner ?? throw new ArgumentNullException(nameof(inner));
-            this.InnerProvider = new ComposableQueryProvider<T>(this);
+            this.InnerQuery = query ?? throw new ArgumentNullException(nameof(query));
+            this.InnerProvider = (TProvider) Activator.CreateInstance(typeof(TProvider), this);
         }
-
+        
         [NotNull]
-        public IQueryable<T> InnerQuery 
-        {
-            get;
-        }
+        public IQueryable<T> InnerQuery { get; }
 
         /// <inheritdoc />
         Expression IQueryable.Expression => this.InnerQuery.Expression;
@@ -35,12 +33,15 @@ namespace CLinq.Core
         IQueryProvider IQueryable.Provider => this.InnerProvider;
 
         /// <inheritdoc />
-        public IEnumerator<T> GetEnumerator() => this.InnerQuery.GetEnumerator();
+        public IEnumerator<T> GetEnumerator()
+            => this.InnerQuery.GetEnumerator();
 
         /// <inheritdoc />
-        IEnumerator IEnumerable.GetEnumerator() => this.InnerQuery.GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator()
+            => this.InnerQuery.GetEnumerator();
 
         /// <inheritdoc />
-        public override string ToString() => this.InnerQuery.ToString();
+        public override string ToString()
+            => this.InnerQuery.ToString();
     }
 }

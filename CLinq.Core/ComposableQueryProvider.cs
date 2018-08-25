@@ -8,9 +8,9 @@ namespace CLinq.Core
     public class ComposableQueryProvider<T> : IQueryProvider
     {
         [NotNull]
-        protected virtual ComposableQuery<T> Query { get; }
+        protected virtual ComposableQuery<T, ComposableQueryProvider<T>> Query { get; }
 
-        public ComposableQueryProvider([NotNull] ComposableQuery<T> query) => this.Query = query;
+        public ComposableQueryProvider([NotNull] ComposableQuery<T, ComposableQueryProvider<T>> query) => this.Query = query;
 
         IQueryable<TElement> IQueryProvider.CreateQuery<TElement>(Expression expression)
         {

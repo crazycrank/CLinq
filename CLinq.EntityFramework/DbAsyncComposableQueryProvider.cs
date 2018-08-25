@@ -10,7 +10,7 @@ namespace CLinq.EntityFramework
 {
     public class DbAsyncComposableQueryProvider<T> : ComposableQueryProvider<T>, IDbAsyncQueryProvider
     {
-        internal DbAsyncComposableQueryProvider([NotNull] DbAsyncComposableQuery<T> query)
+        internal DbAsyncComposableQueryProvider([NotNull] DbAsyncComposableQuery<T, DbAsyncComposableQueryProvider<T>> query)
             : base(query)
         { }
 
