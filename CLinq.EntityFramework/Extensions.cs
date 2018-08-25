@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using JetBrains.Annotations;
 
 namespace CLinq.EntityFramework
 {
@@ -15,8 +14,7 @@ namespace CLinq.EntityFramework
         /// <typeparam name="T"></typeparam>
         /// <param name="query"></param>
         /// <returns></returns>
-        [NotNull]
-        public static IQueryable<T> AsComposable<T>([NotNull] this IQueryable<T> query)
+        public static IQueryable<T> AsComposable<T>(this IQueryable<T> query)
         {
             if (query is null)
                 throw new ArgumentNullException(nameof(query));

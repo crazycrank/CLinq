@@ -1,16 +1,15 @@
 using System;
 using System.Linq;
 using System.Linq.Expressions;
-using JetBrains.Annotations;
 
 namespace CLinq.Core
 {
     public class ComposableQueryProvider<T> : IQueryProvider
     {
-        [NotNull]
+        
         protected virtual ComposableQuery<T> Query { get; }
 
-        public ComposableQueryProvider([NotNull] ComposableQuery<T> query) => this.Query = query;
+        public ComposableQueryProvider(ComposableQuery<T> query) => this.Query = query;
 
         IQueryable<TElement> IQueryProvider.CreateQuery<TElement>(Expression expression)
         {
@@ -36,8 +35,7 @@ namespace CLinq.Core
             return this.Query.InnerQuery.Provider.Execute(composed);
         }
         
-        [NotNull]
-        protected virtual Expression ComposeExpression([NotNull] Expression expression)
+        protected virtual Expression ComposeExpression(Expression expression)
         {
             if (expression is null)
                 throw new ArgumentNullException(nameof(expression));

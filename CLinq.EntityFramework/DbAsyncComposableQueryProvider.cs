@@ -4,17 +4,16 @@ using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 using CLinq.Core;
-using JetBrains.Annotations;
 
 namespace CLinq.EntityFramework
 {
     public class DbAsyncComposableQueryProvider<T> : ComposableQueryProvider<T>, IDbAsyncQueryProvider
     {
-        internal DbAsyncComposableQueryProvider([NotNull] DbAsyncComposableQuery<T> query)
+        internal DbAsyncComposableQueryProvider(DbAsyncComposableQuery<T> query)
             : base(query)
         { }
 
-        public Task<object> ExecuteAsync([NotNull] Expression expression, CancellationToken cancellationToken)
+        public Task<object> ExecuteAsync(Expression expression, CancellationToken cancellationToken)
         {
             if (expression is null)
                 throw new ArgumentNullException(nameof(expression));
@@ -25,7 +24,7 @@ namespace CLinq.EntityFramework
                        : Task.FromResult(this.Query.InnerQuery.Provider.Execute(composed));
         }
 
-        public Task<TResult> ExecuteAsync<TResult>([NotNull] Expression expression, CancellationToken cancellationToken)
+        public Task<TResult> ExecuteAsync<TResult>(Expression expression, CancellationToken cancellationToken)
         {
             if (expression is null)
                 throw new ArgumentNullException(nameof(expression));

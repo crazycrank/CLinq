@@ -3,23 +3,20 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using JetBrains.Annotations;
 
 namespace CLinq.Core
 {
     /// <inheritdoc />
     public class ComposableQuery<T> : IOrderedQueryable<T>
     {
-        [NotNull]
         protected ComposableQueryProvider<T> InnerProvider;
 
-        public ComposableQuery([NotNull] IQueryable<T> inner)
+        public ComposableQuery(IQueryable<T> inner)
         {
             this.InnerQuery = inner ?? throw new ArgumentNullException(nameof(inner));
             this.InnerProvider = new ComposableQueryProvider<T>(this);
         }
 
-        [NotNull]
         public IQueryable<T> InnerQuery 
         {
             get;

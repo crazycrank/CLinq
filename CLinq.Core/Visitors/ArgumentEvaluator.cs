@@ -1,6 +1,5 @@
 ﻿using System.Linq.Expressions;
 using System.Reflection;
-using JetBrains.Annotations;
 
 namespace CLinq.Core.Visitors
 {
@@ -9,11 +8,9 @@ namespace CLinq.Core.Visitors
     /// </summary>
     internal class ArgumentEvaluator : ExpressionVisitor
     {
-        [CanBeNull]
         private object _result;
 
-        [CanBeNull]
-        public object Evaluate([CanBeNull] Expression expression)
+        public object Evaluate(Expression expression)
         {
             if (expression is null)
                 return null;
@@ -22,8 +19,7 @@ namespace CLinq.Core.Visitors
             return this._result;
         }
 
-        [NotNull]
-        public Expression EvaluateAsExpression([CanBeNull] Expression expression)
+        public Expression EvaluateAsExpression(Expression expression)
         {
             var result = this.Evaluate(expression);
             switch (result)

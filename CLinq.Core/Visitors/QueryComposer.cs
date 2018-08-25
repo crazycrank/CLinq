@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using JetBrains.Annotations;
 
 namespace CLinq.Core.Visitors
 {
@@ -12,13 +11,12 @@ namespace CLinq.Core.Visitors
     /// </summary>
     internal class QueryComposer : ExpressionVisitor
     {
-        [NotNull]
         private readonly IDictionary<ParameterExpression, Expression> _parametersToReplace = new Dictionary<ParameterExpression, Expression>();
 
         internal QueryComposer()
         { }
 
-        private QueryComposer([NotNull] IEnumerable<(ParameterExpression parameter, Expression replaceBy)> replaceParameters)
+        private QueryComposer(IEnumerable<(ParameterExpression parameter, Expression replaceBy)> replaceParameters)
         {
             if (replaceParameters is null)
                 throw new ArgumentNullException(nameof(replaceParameters));
@@ -71,7 +69,7 @@ namespace CLinq.Core.Visitors
             return base.VisitMethodCall(node);
         }
 
-        private Expression ParseMemberExpression([NotNull] MemberExpression memberExpression)
+        private Expression ParseMemberExpression(MemberExpression memberExpression)
         {
             var argumentVisitor = new ArgumentEvaluator();
             switch (memberExpression)
@@ -89,7 +87,7 @@ namespace CLinq.Core.Visitors
             }
         }
 
-        private Expression ParseMethodCallExpression([NotNull] MethodCallExpression methodCallExpression)
+        private Expression ParseMethodCallExpression(MethodCallExpression methodCallExpression)
         {
             if (!(typeof(Expression).GetTypeInfo()?.IsAssignableFrom(methodCallExpression.Method.ReturnType.GetTypeInfo()) ?? false))
             {

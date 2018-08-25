@@ -3,16 +3,14 @@ using System.Collections.Generic;
 using System.Data.Entity.Infrastructure;
 using System.Threading;
 using System.Threading.Tasks;
-using JetBrains.Annotations;
 
 namespace CLinq.EntityFramework
 {
     public sealed class DbAsyncComposableEnumerator<T> : IDbAsyncEnumerator<T>
     {
-        [NotNull]
         private readonly IEnumerator<T> _inner;
 
-        public DbAsyncComposableEnumerator([NotNull] IEnumerator<T> inner)
+        public DbAsyncComposableEnumerator(IEnumerator<T> inner)
             => this._inner = inner ?? throw new ArgumentNullException(nameof(inner));
 
         /// <inheritdoc />
