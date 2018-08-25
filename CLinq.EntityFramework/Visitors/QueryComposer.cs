@@ -4,7 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace CLinq.Core.Visitors
+namespace CLinq.Visitors
 {
     /// <summary>
     /// Visits a query and merges all methods, which are marked with <see cref="Extensions.Pass{TResult}"/>, into the base query

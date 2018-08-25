@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Linq;
 using System.Linq.Expressions;
-using CLinq.Core;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Testing.Database;
 using Testing.Database.Model;
 
-namespace Testing.Runner
+namespace CLinq.IntegrationTests
 {
     [TestClass]
     public class SimpleExpressionTest
@@ -14,13 +13,12 @@ namespace Testing.Runner
         private int _employeeId;
         private int _superiorId;
 
-
-        private Expression<Func<Employee, Employee>> _getSuperiorField = e => e.Superior;
+        private readonly Expression<Func<Employee, Employee>> _getSuperiorField = e => e.Superior;
 
         private readonly Expression<Func<Employee, Employee>> _getSuperiorFieldReadonly = e => e.Superior;
 
         // ReSharper disable once ConvertToAutoProperty
-        private Expression<Func<Employee, Employee>> GetSuperiorProperty => _getSuperiorField;
+        private Expression<Func<Employee, Employee>> GetSuperiorProperty => this._getSuperiorField;
 
         private Expression<Func<Employee, Employee>> GetSuperiorMethod() => e => e.Superior;
 
@@ -29,9 +27,9 @@ namespace Testing.Runner
         {
             using (var dataContext = new DataContext())
             {
-                _employeeId = dataContext.Employees.First(e => e.Name == "Employee 3").Id;
+                this._employeeId = dataContext.Employees.First(e => e.Name == "Employee 3").Id;
                 // ReSharper disable once PossibleInvalidOperationException
-                _superiorId = dataContext.Employees.First(e => e.Id == _employeeId).SuperiorId.Value;
+                this._superiorId = dataContext.Employees.First(e => e.Id == this._employeeId).SuperiorId.Value;
             }
             
         }
@@ -43,13 +41,13 @@ namespace Testing.Runner
             {
                 var query = dataContext.Employees
                                        .AsComposable()
-                                       .Where(e => e.Id == _employeeId)
+                                       .Where(e => e.Id == this._employeeId)
                                        .Select(e => StaticExpressionHolder.GetSuperiorField.Pass(e));
 
                 var result = query.ToList();
 
                 Assert.AreEqual(1, result.Count);
-                Assert.AreEqual(_superiorId, result.First().Id);
+                Assert.AreEqual(this._superiorId, result.First().Id);
             }
         }
 
@@ -60,13 +58,13 @@ namespace Testing.Runner
             {
                 var query = dataContext.Employees
                                        .AsComposable()
-                                       .Where(e => e.Id == _employeeId)
+                                       .Where(e => e.Id == this._employeeId)
                                        .Select(e => StaticExpressionHolder.GetSuperiorFieldReadonly.Pass(e));
 
                 var result = query.ToList();
 
                 Assert.AreEqual(1, result.Count);
-                Assert.AreEqual(_superiorId, result.First().Id);
+                Assert.AreEqual(this._superiorId, result.First().Id);
             }
         }
 
@@ -77,13 +75,13 @@ namespace Testing.Runner
             {
                 var query = dataContext.Employees
                                        .AsComposable()
-                                       .Where(e => e.Id == _employeeId)
+                                       .Where(e => e.Id == this._employeeId)
                                        .Select(e => StaticExpressionHolder.GetSuperiorProperty.Pass(e));
 
                 var result = query.ToList();
 
                 Assert.AreEqual(1, result.Count);
-                Assert.AreEqual(_superiorId, result.First().Id);
+                Assert.AreEqual(this._superiorId, result.First().Id);
             }
         }
 
@@ -94,13 +92,13 @@ namespace Testing.Runner
             {
                 var query = dataContext.Employees
                                        .AsComposable()
-                                       .Where(e => e.Id == _employeeId)
+                                       .Where(e => e.Id == this._employeeId)
                                        .Select(e => StaticExpressionHolder.GetSuperiorMethod().Pass(e));
 
                 var result = query.ToList();
 
                 Assert.AreEqual(1, result.Count);
-                Assert.AreEqual(_superiorId, result.First().Id);
+                Assert.AreEqual(this._superiorId, result.First().Id);
             }
         }
 
@@ -113,13 +111,13 @@ namespace Testing.Runner
             {
                 var query = dataContext.Employees
                                        .AsComposable()
-                                       .Where(e => e.Id == _employeeId)
+                                       .Where(e => e.Id == this._employeeId)
                                        .Select(e => instance.GetSuperiorField.Pass(e));
 
                 var result = query.ToList();
 
                 Assert.AreEqual(1, result.Count);
-                Assert.AreEqual(_superiorId, result.First().Id);
+                Assert.AreEqual(this._superiorId, result.First().Id);
             }
         }
 
@@ -131,13 +129,13 @@ namespace Testing.Runner
             {
                 var query = dataContext.Employees
                                        .AsComposable()
-                                       .Where(e => e.Id == _employeeId)
+                                       .Where(e => e.Id == this._employeeId)
                                        .Select(e => instance.GetSuperiorFieldReadonly.Pass(e));
 
                 var result = query.ToList();
 
                 Assert.AreEqual(1, result.Count);
-                Assert.AreEqual(_superiorId, result.First().Id);
+                Assert.AreEqual(this._superiorId, result.First().Id);
             }
         }
 
@@ -149,13 +147,13 @@ namespace Testing.Runner
             {
                 var query = dataContext.Employees
                                        .AsComposable()
-                                       .Where(e => e.Id == _employeeId)
+                                       .Where(e => e.Id == this._employeeId)
                                        .Select(e => instance.GetSuperiorProperty.Pass(e));
 
                 var result = query.ToList();
 
                 Assert.AreEqual(1, result.Count);
-                Assert.AreEqual(_superiorId, result.First().Id);
+                Assert.AreEqual(this._superiorId, result.First().Id);
             }
         }
 
@@ -167,13 +165,13 @@ namespace Testing.Runner
             {
                 var query = dataContext.Employees
                                        .AsComposable()
-                                       .Where(e => e.Id == _employeeId)
+                                       .Where(e => e.Id == this._employeeId)
                                        .Select(e => instance.GetSuperiorMethod().Pass(e));
 
                 var result = query.ToList();
 
                 Assert.AreEqual(1, result.Count);
-                Assert.AreEqual(_superiorId, result.First().Id);
+                Assert.AreEqual(this._superiorId, result.First().Id);
             }
         }
 
@@ -186,13 +184,13 @@ namespace Testing.Runner
             {
                 var query = dataContext.Employees
                                        .AsComposable()
-                                       .Where(e => e.Id == _employeeId)
-                                       .Select(e => _getSuperiorField.Pass(e));
+                                       .Where(e => e.Id == this._employeeId)
+                                       .Select(e => this._getSuperiorField.Pass(e));
 
                 var result = query.ToList();
 
                 Assert.AreEqual(1, result.Count);
-                Assert.AreEqual(_superiorId, result.First().Id);
+                Assert.AreEqual(this._superiorId, result.First().Id);
             }
         }
 
@@ -203,13 +201,13 @@ namespace Testing.Runner
             {
                 var query = dataContext.Employees
                                        .AsComposable()
-                                       .Where(e => e.Id == _employeeId)
-                                       .Select(e => _getSuperiorFieldReadonly.Pass(e));
+                                       .Where(e => e.Id == this._employeeId)
+                                       .Select(e => this._getSuperiorFieldReadonly.Pass(e));
 
                 var result = query.ToList();
 
                 Assert.AreEqual(1, result.Count);
-                Assert.AreEqual(_superiorId, result.First().Id);
+                Assert.AreEqual(this._superiorId, result.First().Id);
             }
         }
 
@@ -220,13 +218,13 @@ namespace Testing.Runner
             {
                 var query = dataContext.Employees
                                        .AsComposable()
-                                       .Where(e => e.Id == _employeeId)
-                                       .Select(e => GetSuperiorProperty.Pass(e));
+                                       .Where(e => e.Id == this._employeeId)
+                                       .Select(e => this.GetSuperiorProperty.Pass(e));
 
                 var result = query.ToList();
 
                 Assert.AreEqual(1, result.Count);
-                Assert.AreEqual(_superiorId, result.First().Id);
+                Assert.AreEqual(this._superiorId, result.First().Id);
             }
         }
 
@@ -237,13 +235,13 @@ namespace Testing.Runner
             {
                 var query = dataContext.Employees
                                        .AsComposable()
-                                       .Where(e => e.Id == _employeeId)
-                                       .Select(e => GetSuperiorMethod().Pass(e));
+                                       .Where(e => e.Id == this._employeeId)
+                                       .Select(e => this.GetSuperiorMethod().Pass(e));
 
                 var result = query.ToList();
 
                 Assert.AreEqual(1, result.Count);
-                Assert.AreEqual(_superiorId, result.First().Id);
+                Assert.AreEqual(this._superiorId, result.First().Id);
             }
         }
 
@@ -272,7 +270,7 @@ namespace Testing.Runner
         private readonly Expression<Func<Employee, Employee>> _getSuperiorProperty = e => e.Superior;
 
         // ReSharper disable once ConvertToAutoProperty
-        public Expression<Func<Employee, Employee>> GetSuperiorProperty => _getSuperiorProperty;
+        public Expression<Func<Employee, Employee>> GetSuperiorProperty => this._getSuperiorProperty;
 
         public Expression<Func<Employee, Employee>> GetSuperiorMethod() => e => e.Superior;
     }

@@ -4,7 +4,7 @@ using System.Data.Entity.Infrastructure;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace CLinq.EntityFramework
+namespace CLinq
 {
     public sealed class DbAsyncComposableEnumerator<T> : IDbAsyncEnumerator<T>
     {

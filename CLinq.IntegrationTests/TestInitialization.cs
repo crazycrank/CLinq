@@ -5,7 +5,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Testing.Database;
 using Testing.Database.Model;
 
-namespace Testing.Runner
+namespace CLinq.IntegrationTests
 {
     [TestClass]
     public class TestInitialization
@@ -13,10 +13,10 @@ namespace Testing.Runner
         [AssemblyInitialize]
         public static void Initialize(TestContext ctx)
         {
-            using (var context = new DataContext())
-            {
-                System.Data.Entity.Database.Delete(context.Database.Connection);
-            }
+            //using (var context = new DataContext())
+            //{
+            //    System.Data.Entity.Database.Delete(context.Database.Connection);
+            //}
 
             using (var context = new DataContext())
             {

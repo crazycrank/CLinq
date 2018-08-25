@@ -2,18 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using CLinq.Core;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Testing.Database;
 using Testing.Database.Model;
 
-namespace Testing.Runner
+namespace CLinq.IntegrationTests
 {
     [TestClass]
     public class CombinedExpressionTest
     {
-        private int _employeeId;
-
         private static readonly Expression<Func<Employee, IEnumerable<Employee>>> GetSubordinates = e => e.Employees;
 
         private static readonly Expression<Func<Employee, bool>> YoungerThan1980 = e => e.Birthdate > new DateTime(1980, 1, 1);
@@ -27,8 +24,10 @@ namespace Testing.Runner
         private static readonly Expression<Func<IEnumerable<Employee>, IEnumerable<Project>>> GetProjectsForEmployees =
             employees => employees.SelectMany(e => e.EmployeeProjects).Select(ep => ep.Project).Distinct();
 
-        private IEnumerable<Project> _projectsOfManager1Subordinates;
+        private int _employeeId;
         private IEnumerable<Employee> _employeesYoungerThan1980AndMin2Projects;
+
+        private IEnumerable<Project> _projectsOfManager1Subordinates;
 
 
         [TestInitialize]
@@ -36,16 +35,16 @@ namespace Testing.Runner
         {
             using (var dataContext = new DataContext())
             {
-                _employeeId = dataContext.Employees.First(e => e.Name == "Manager 1").Id;
+                this._employeeId = dataContext.Employees.First(e => e.Name == "Manager 1").Id;
                 // ReSharper disable once PossibleInvalidOperationException
-                _projectsOfManager1Subordinates = dataContext.Employees
-                                           .Where(e => e.SuperiorId == _employeeId)
-                                           .SelectMany(e => e.EmployeeProjects)
-                                           .Select(ep => ep.Project)
-                                           .Distinct()
-                                           .ToList();
+                this._projectsOfManager1Subordinates = dataContext.Employees
+                                                                  .Where(e => e.SuperiorId == this._employeeId)
+                                                                  .SelectMany(e => e.EmployeeProjects)
+                                                                  .Select(ep => ep.Project)
+                                                                  .Distinct()
+                                                                  .ToList();
 
-                _employeesYoungerThan1980AndMin2Projects = dataContext.Employees
+                this._employeesYoungerThan1980AndMin2Projects = dataContext.Employees
                                                                            .Where(e => e.Birthdate > new DateTime(1980, 1, 1) && e.EmployeeProjects.Count > 2)
                                                                            .ToList();
             }
@@ -58,12 +57,12 @@ namespace Testing.Runner
             {
                 var query = dataContext.Employees
                                        .AsComposable()
-                                       .Where(e => e.Id ==_employeeId)
+                                       .Where(e => e.Id == this._employeeId)
                                        .SelectMany(e => GetProjectsForEmployees.Pass(GetSubordinates.Pass(e)))
                                        .Distinct();
 
                 var projectsOfManager1Subordinates = query.ToList();
-                Assert.AreEqual(_projectsOfManager1Subordinates.Count(), projectsOfManager1Subordinates.Count);
+                Assert.AreEqual(this._projectsOfManager1Subordinates.Count(), projectsOfManager1Subordinates.Count);
             }
         }
 
@@ -76,7 +75,7 @@ namespace Testing.Runner
                                        .AsComposable()
                                        .Where(e => YoungerThan1980.Pass(e) && MoreThan2Projects.Pass(e));
                 var result = query.ToList();
-                Assert.AreEqual(_employeesYoungerThan1980AndMin2Projects.Count(), result.Count);
+                Assert.AreEqual(this._employeesYoungerThan1980AndMin2Projects.Count(), result.Count);
             }
         }
 
@@ -89,7 +88,7 @@ namespace Testing.Runner
                                        .AsComposable()
                                        .Where(e => YoungerThan1980AndMoreThan2Projects.Pass(e));
                 var result = query.ToList();
-                Assert.AreEqual(_employeesYoungerThan1980AndMin2Projects.Count(), result.Count);
+                Assert.AreEqual(this._employeesYoungerThan1980AndMin2Projects.Count(), result.Count);
             }
         }
 
@@ -103,7 +102,7 @@ namespace Testing.Runner
                                        .AsComposable()
                                        .Where(e => YoungerThan1980AndMoreThan2Projects2.Pass(e));
                 var result = query.ToList();
-                Assert.AreEqual(_employeesYoungerThan1980AndMin2Projects.Count(), result.Count);
+                Assert.AreEqual(this._employeesYoungerThan1980AndMin2Projects.Count(), result.Count);
             }
         }
 
@@ -114,7 +113,7 @@ namespace Testing.Runner
             {
                 var query = MethodWithExpressionAsParam(dataContext.Employees.AsComposable(), YoungerThan1980AndMoreThan2Projects);
                 var result = query.ToList();
-                Assert.AreEqual(_employeesYoungerThan1980AndMin2Projects.Count(), result.Count);
+                Assert.AreEqual(this._employeesYoungerThan1980AndMin2Projects.Count(), result.Count);
             }
         }
 
@@ -123,13 +122,13 @@ namespace Testing.Runner
         {
             using (var dataContext = new DataContext())
             {
-                var query = MethodWithExpressionAsParam(MethodWithExpressionAsParam(dataContext.Employees.AsComposable(), YoungerThan1980), MoreThan2Projects);
+                var query = this.MethodWithExpressionAsParam(MethodWithExpressionAsParam(dataContext.Employees.AsComposable(), YoungerThan1980), MoreThan2Projects);
                 var result = query.ToList();
-                Assert.AreEqual(_employeesYoungerThan1980AndMin2Projects.Count(), result.Count);
+                Assert.AreEqual(this._employeesYoungerThan1980AndMin2Projects.Count(), result.Count);
             }
         }
 
-        private IQueryable<Employee> MethodWithExpressionAsParam(IQueryable<Employee> query, Expression<Func<Employee, bool>> conditional) 
+        private IQueryable<Employee> MethodWithExpressionAsParam(IQueryable<Employee> query, Expression<Func<Employee, bool>> conditional)
             => query.Where(conditional);
     }
 }

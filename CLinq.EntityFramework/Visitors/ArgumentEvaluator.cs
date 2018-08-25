@@ -1,7 +1,7 @@
 ﻿using System.Linq.Expressions;
 using System.Reflection;
 
-namespace CLinq.Core.Visitors
+namespace CLinq.Visitors
 {
     /// <summary>
     /// Allows for composable queries to resolve non-expression parameters before composing the query

@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Linq.Expressions;
 
-namespace CLinq.Core
+namespace CLinq
 {
-    /// <inheritdoc />
-    public class ComposableQuery<T> : IOrderedQueryable<T>
+    public class ComposableQuery<T> : IOrderedQueryable<T>, IDbAsyncEnumerable<T>
     {
         protected ComposableQueryProvider<T> InnerProvider;
 
@@ -36,6 +36,16 @@ namespace CLinq.Core
 
         /// <inheritdoc />
         IEnumerator IEnumerable.GetEnumerator() => this.InnerQuery.GetEnumerator();
+
+        /// <inheritdoc />
+        public IDbAsyncEnumerator<T> GetAsyncEnumerator()
+            => this.InnerQuery is IDbAsyncEnumerable<T> asyncEnumerable
+                   ? asyncEnumerable.GetAsyncEnumerator()
+                   : new DbAsyncComposableEnumerator<T>(this.InnerQuery.GetEnumerator());
+
+        /// <inheritdoc />
+        IDbAsyncEnumerator IDbAsyncEnumerable.GetAsyncEnumerator()
+            => this.GetAsyncEnumerator();
 
         /// <inheritdoc />
         public override string ToString() => this.InnerQuery.ToString();
