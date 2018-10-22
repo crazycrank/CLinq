@@ -3,6 +3,7 @@ using System.Reflection;
 
 namespace CLinq.Visitors
 {
+    /// <inheritdoc />
     /// <summary>
     /// Allows for composable queries to resolve non-expression parameters before composing the query
     /// </summary>

@@ -7,14 +7,14 @@ using System.Linq.Expressions;
 
 namespace CLinq
 {
-    public class ComposableQuery<T> : IOrderedQueryable<T>, IDbAsyncEnumerable<T>
+    public sealed class ComposableQuery<T> : IOrderedQueryable<T>, IDbAsyncEnumerable<T>
     {
-        protected ComposableQueryProvider<T> InnerProvider;
+        private readonly ComposableQueryProvider<T> _innerProvider;
 
         public ComposableQuery(IQueryable<T> inner)
         {
             this.InnerQuery = inner ?? throw new ArgumentNullException(nameof(inner));
-            this.InnerProvider = new ComposableQueryProvider<T>(this);
+            this._innerProvider = new ComposableQueryProvider<T>(this);
         }
 
         public IQueryable<T> InnerQuery 
@@ -29,7 +29,7 @@ namespace CLinq
         Type IQueryable.ElementType => typeof(T);
 
         /// <inheritdoc />
-        IQueryProvider IQueryable.Provider => this.InnerProvider;
+        IQueryProvider IQueryable.Provider => this._innerProvider;
 
         /// <inheritdoc />
         public IEnumerator<T> GetEnumerator() => this.InnerQuery.GetEnumerator();
