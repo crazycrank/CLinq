@@ -4,19 +4,20 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace CLinq.Visitors
+namespace CLinq
 {
     /// <summary>
     /// Visits a query and merges all methods, which are marked with <see cref="Extensions.Pass{TResult}"/>, into the base query
     /// </summary>
-    internal class QueryComposer : ExpressionVisitor
+    internal class ComposeQueryVisitor : ExpressionVisitor
     {
         private readonly IDictionary<ParameterExpression, Expression> _parametersToReplace = new Dictionary<ParameterExpression, Expression>();
 
-        internal QueryComposer()
-        { }
+        internal ComposeQueryVisitor()
+        {
+        }
 
-        private QueryComposer(IEnumerable<(ParameterExpression parameter, Expression replaceBy)> replaceParameters)
+        private ComposeQueryVisitor(IEnumerable<(ParameterExpression parameter, Expression replaceBy)> replaceParameters)
         {
             if (replaceParameters is null)
                 throw new ArgumentNullException(nameof(replaceParameters));
@@ -60,8 +61,8 @@ namespace CLinq.Visitors
                     throw new InvalidOperationException();
                 }
 
-                return new QueryComposer(lambda.Parameters.Zip(node.Arguments.Skip(1),
-                                                              (parameter, replaceBy) => (parameter, replaceBy)))
+                return new ComposeQueryVisitor(lambda.Parameters.Zip(node.Arguments.Skip(1),
+                                                                     (parameter, replaceBy) => (parameter, replaceBy)))
                            .Visit(lambda.Body)
                        ?? throw new InvalidOperationException();
             }
@@ -71,7 +72,7 @@ namespace CLinq.Visitors
 
         private Expression ParseMemberExpression(MemberExpression memberExpression)
         {
-            var argumentVisitor = new ArgumentEvaluator();
+            var argumentVisitor = new EvaluateArgumentVisitor();
             switch (memberExpression)
             {
                 case var m when m.NodeType == ExpressionType.MemberAccess
@@ -80,7 +81,11 @@ namespace CLinq.Visitors
 
                 case var m when m.NodeType == ExpressionType.MemberAccess
                                 && m.Member is PropertyInfo pi:
-                    return this.Visit(pi.GetValue(argumentVisitor.Evaluate(memberExpression.Expression)) as Expression);
+                    return this.Visit(pi.GetValue(argumentVisitor.Evaluate(memberExpression.Expression)
+#if NET40
+                                                 , null
+#endif
+                                                 ) as Expression);
 
                 default:
                     return Expression.Constant(null);
@@ -89,12 +94,16 @@ namespace CLinq.Visitors
 
         private Expression ParseMethodCallExpression(MethodCallExpression methodCallExpression)
         {
+#if NET40
+            if (!(typeof(Expression).IsAssignableFrom(methodCallExpression.Method.ReturnType)))
+#else
             if (!(typeof(Expression).GetTypeInfo()?.IsAssignableFrom(methodCallExpression.Method.ReturnType.GetTypeInfo()) ?? false))
+#endif
             {
                 throw new InvalidOperationException();
             }
 
-            return this.Visit(new ArgumentEvaluator().EvaluateAsExpression(methodCallExpression));
+            return this.Visit(new EvaluateArgumentVisitor().EvaluateAsExpression(methodCallExpression));
         }
     }
 }

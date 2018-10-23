@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Linq.Expressions;
-using CLinq.Visitors;
 
 namespace CLinq
 {
@@ -260,22 +259,6 @@ namespace CLinq
             return query is ComposableQuery<T> composableQuery
                        ? composableQuery
                        : new ComposableQuery<T>(query);
-        }
-
-        public static Expression<T> Compose<T>(this Expression<T> expression)
-        {
-            if (expression is null)
-                throw new ArgumentNullException(nameof(expression));
-
-            return (Expression<T>) new QueryComposer().Visit(expression) ?? throw new InvalidOperationException();
-        }
-
-        public static Expression Compose(this Expression expression)
-        {
-            if (expression is null)
-                throw new ArgumentNullException(nameof(expression));
-
-            return new QueryComposer().Visit(expression) ?? throw new InvalidOperationException();
         }
     }
 }

@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0;netcoreapp2.0;net461;net47</TargetFrameworks>
+    <DefineConstants>$(DefineConstants);EFCORE</DefineConstants>
+
+    <Description>Version for Entity Framework Core (>= 2.0). Allows the creating of composable queries and thus the reusability of Linq2Entity query snippets. This version is framework independent and can be used with all Linq2... Frameworks</Description>
+    <PackageTags>Linq Linq2Entity CLinq Composable EF EFCore Entity Framework Core EntityFramework EntityFrameworkCore</PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\CLinq\**\*.cs" Exclude="..\CLinq\obj\**" />
+  </ItemGroup>
+
+  <Import Project="$(SolutionDir)/package.targets" />
+  <Import Project="$(SolutionDir)/build.targets" />
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.0.0" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,33 @@
+<Project>
+
+  <PropertyGroup>
+    <RootNamespace>CLinq</RootNamespace>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <NoTuples Condition="
+                '$(TargetFramework)' == 'netstandard1.0' 
+             or '$(TargetFramework)' == 'netstandard1.1' 
+             or '$(TargetFramework)' == 'netstandard1.2' 
+             or '$(TargetFramework)' == 'netstandard1.3' 
+             or '$(TargetFramework)' == 'netstandard1.4' 
+             or '$(TargetFramework)' == 'netstandard1.5' 
+             or '$(TargetFramework)' == 'netstandard1.6' 
+             or '$(TargetFramework)' == 'netcoreapp1.0' 
+             or '$(TargetFramework)' == 'netcoreapp1.1' 
+             or '$(TargetFramework)' == 'net40'
+             or '$(TargetFramework)' == 'net403'
+             or '$(TargetFramework)' == 'net45' 
+             or '$(TargetFramework)' == 'net451' 
+             or '$(TargetFramework)' == 'net452' 
+             or '$(TargetFramework)' == 'net46' 
+             or '$(TargetFramework)' == 'net461'
+             or '$(TargetFramework)' == 'net462'">true</NoTuples>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(NoTuples)' == 'true'">
+    <PackageReference Include="System.ValueTuple" Version="4.3.0" />
+  </ItemGroup>
+
+</Project>

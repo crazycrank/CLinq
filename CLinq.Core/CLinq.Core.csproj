@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard1.0;netstandard1.3;netstandard1.6;netstandard2.0;netcoreapp1.0;netcoreapp2.0;net40;net45;net46;net47</TargetFrameworks>
+
+    <Description>Allows the creating of composable queries and thus the reusability of Linq query snippets. This version is framework independent and can be used with all Linq2... Frameworks</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\CLinq\**\*.cs" Exclude="..\CLinq\obj\**"/>
+  </ItemGroup>
+
+  <Import Project="$(SolutionDir)/package.targets"/>
+  <Import Project="$(SolutionDir)/build.targets"/>
+
+</Project>

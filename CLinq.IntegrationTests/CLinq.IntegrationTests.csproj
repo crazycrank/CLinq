@@ -5,6 +5,8 @@
     <LangVersion>latest</LangVersion>
 
     <IsPackable>false</IsPackable>
+
+    <Configurations>Debug;Release;Core.Debug;EF6.Debug;Core.Release;EF6.Release;EFCore.Debug;EFCore.Release</Configurations>
   </PropertyGroup>
 
   <ItemGroup>
@@ -15,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CLinq.EntityFramework\CLinq.EntityFramework.csproj" />
+    <ProjectReference Include="..\CLinq.EF6\CLinq.EF6.csproj" />
     <ProjectReference Include="..\Testing.Database\Testing.Database.csproj" />
   </ItemGroup>
 

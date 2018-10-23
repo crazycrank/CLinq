@@ -1,13 +1,13 @@
 ﻿using System.Linq.Expressions;
 using System.Reflection;
 
-namespace CLinq.Visitors
+namespace CLinq
 {
     /// <inheritdoc />
     /// <summary>
     /// Allows for composable queries to resolve non-expression parameters before composing the query
     /// </summary>
-    internal class ArgumentEvaluator : ExpressionVisitor
+    internal class EvaluateArgumentVisitor : ExpressionVisitor
     {
         private object _result;
 
@@ -54,10 +54,10 @@ namespace CLinq.Visitors
             for (var index = 0; index < node.Arguments.Count; index++)
             {
                 var nodeArgument = node.Arguments[index];
-                arguments[index] = new ArgumentEvaluator().Evaluate(nodeArgument);
+                arguments[index] = new EvaluateArgumentVisitor().Evaluate(nodeArgument);
             }
 
-            this._result = node.Method.Invoke(new ArgumentEvaluator().Evaluate(node.Object), arguments);
+            this._result = node.Method.Invoke(new EvaluateArgumentVisitor().Evaluate(node.Object), arguments);
 
             return node;
         }

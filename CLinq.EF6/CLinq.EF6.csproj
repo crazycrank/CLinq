@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net40;net45;net46;net47</TargetFrameworks>
+    <DefineConstants>$(DefineConstants);EF6</DefineConstants>
+
+    <Description>Version for Entity Framework Core (>= 2.0). Allows the creating of composable queries and thus the reusability of Linq2Entity query snippets. This version is framework independent and can be used with all Linq2... Frameworks</Description>
+    <PackageTags>Linq Linq2Entity CLinq Composable EF6 EF Entity Framework EntityFramework</PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\CLinq\**\*.cs" Exclude="..\CLinq\obj\**" />
+  </ItemGroup>
+
+  <Import Project="$(SolutionDir)/package.targets" />
+  <Import Project="$(SolutionDir)/build.targets" />
+
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net40'">
+    <DefineConstants>$(DefineConstants);EF6_NOASYNC</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="EntityFramework" Version="6.0.0" />
+  </ItemGroup>
+
+</Project>

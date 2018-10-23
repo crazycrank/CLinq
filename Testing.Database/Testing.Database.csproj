@@ -3,6 +3,7 @@
     <TargetFramework>net45</TargetFramework>
     <IsPackable>false</IsPackable>
     <LangVersion>latest</LangVersion>
+    <Configurations>Debug;Release;Core.Debug;EF6.Debug;Core.Release;EF6.Release;EFCore.Debug;EFCore.Release</Configurations>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="EntityFramework" Version="6.0.0" />
