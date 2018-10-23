@@ -1,5 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
+  <Import Project="..\package.targets" />
+
   <PropertyGroup>
     <TargetFrameworks>netstandard1.0;netstandard1.3;netstandard1.6;netstandard2.0;netcoreapp1.0;netcoreapp2.0;net40;net45;net46;net47</TargetFrameworks>
 
@@ -7,10 +9,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="..\CLinq\**\*.cs" Exclude="..\CLinq\obj\**"/>
+    <Compile Include="..\CLinq\**\*.cs" Exclude="..\CLinq\obj\**" />
+    <None Include="..\CLinq.nuspec" Link="CLinq.nuspec" />
   </ItemGroup>
 
-  <Import Project="$(SolutionDir)/package.targets"/>
-  <Import Project="$(SolutionDir)/build.targets"/>
+  <Import Project="..\build.targets" />
 
 </Project>

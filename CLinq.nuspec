@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>CLinq</id>
+    <version>$version$</version>
+    <title>$title$</title>
+    <authors>$author$</authors>
+    <owners>$author$</owners>
+    <licenseUrl>$packageLicenseUrl$</licenseUrl>
+    <projectUrl>packageProjectUrl$</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>$description$</description>
+    <copyright>$copyright$</copyright>
+    <tags>$tags$</tags>
+    <summary>$description$</summary>
+    <repository type="$repositoryType$" url="$repositoryUrl$" branch="master" />
+  </metadata> 
+
+  <files>
+    <file src="../README.MD" target="" />
+  </files>
+</package>
