@@ -6,7 +6,7 @@
     <TargetFrameworks>net40;net45;net46;net47</TargetFrameworks>
     <DefineConstants>$(DefineConstants);EF6</DefineConstants>
 
-    <Description>Version for Entity Framework Core (>= 2.0). Allows the creating of composable queries and thus the reusability of Linq2Entity query snippets. This version is framework independent and can be used with all Linq2... Frameworks</Description>
+    <Description>Version for Entity Framework (>= 6.0). Allows the creating of composable queries and thus the reusability of Linq2Entity query snippets.</Description>
     <PackageTags>Linq Linq2Entity CLinq Composable EF6 EF Entity Framework EntityFramework</PackageTags>
   </PropertyGroup>
 

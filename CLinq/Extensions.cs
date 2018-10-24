@@ -13,25 +13,25 @@ namespace CLinq
         /// Marks an parameterless expression for LinqOnSteroids, so that it will be composed when the query will be called
         /// </summary>
         public static TResult Pass<TResult>(this Expression<Func<TResult>> expression)
-            => expression.Compile()();
+            => default;
 
         /// <summary>
         /// Marks an parametered expression for LinqOnSteroids, so that it will be composed when the query will be called
         /// </summary>
         public static TResult Pass<T1, TResult>(this Expression<Func<T1, TResult>> expression, T1 param1)
-            => expression.Compile()(param1);
+            => default;
 
         /// <summary>
         /// Marks an parametered expression for LinqOnSteroids, so that it will be composed when the query will be called
         /// </summary>
         public static TResult Pass<T1, T2, TResult>(this Expression<Func<T1, T2, TResult>> expression, T1 param1, T2 param2)
-            => expression.Compile()(param1, param2);
+            => default;
 
         /// <summary>
         /// Marks an parametered expression for LinqOnSteroids, so that it will be composed when the query will be called
         /// </summary>
         public static TResult Pass<T1, T2, T3, TResult>(this Expression<Func<T1, T2, T3, TResult>> expression, T1 param1, T2 param2, T3 param3)
-            => expression.Compile()(param1, param2, param3);
+            => default;
 
         /// <summary>
         /// Marks an parametered expression for LinqOnSteroids, so that it will be composed when the query will be called
@@ -41,7 +41,7 @@ namespace CLinq
                                                             T2 param2,
                                                             T3 param3,
                                                             T4 param4)
-            => expression.Compile()(param1, param2, param3, param4);
+            => default;
 
         /// <summary>
         /// Marks an parametered expression for LinqOnSteroids, so that it will be composed when the query will be called
@@ -52,7 +52,7 @@ namespace CLinq
                                                                 T3 param3,
                                                                 T4 param4,
                                                                 T5 param5)
-            => expression.Compile()(param1, param2, param3, param4, param5);
+            => default;
 
         /// <summary>
         /// Marks an parametered expression for LinqOnSteroids, so that it will be composed when the query will be called
@@ -64,7 +64,7 @@ namespace CLinq
                                                                     T4 param4,
                                                                     T5 param5,
                                                                     T6 param6)
-            => expression.Compile()(param1, param2, param3, param4, param5, param6);
+            => default;
 
         /// <summary>
         /// Marks an parametered expression for LinqOnSteroids, so that it will be composed when the query will be called
@@ -77,7 +77,7 @@ namespace CLinq
                                                                         T5 param5,
                                                                         T6 param6,
                                                                         T7 param7)
-            => expression.Compile()(param1, param2, param3, param4, param5, param6, param7);
+            => default;
 
         /// <summary>
         /// Marks an parametered expression for LinqOnSteroids, so that it will be composed when the query will be called
@@ -91,7 +91,7 @@ namespace CLinq
                                                                             T6 param6,
                                                                             T7 param7,
                                                                             T8 param8)
-            => expression.Compile()(param1, param2, param3, param4, param5, param6, param7, param8);
+            => default;
 
         /// <summary>
         /// Marks an parametered expression for LinqOnSteroids, so that it will be composed when the query will be called
@@ -106,7 +106,7 @@ namespace CLinq
                                                                                 T7 param7,
                                                                                 T8 param8,
                                                                                 T9 param9)
-            => expression.Compile()(param1, param2, param3, param4, param5, param6, param7, param8, param9);
+            => default;
 
         /// <summary>
         /// Marks an parametered expression for LinqOnSteroids, so that it will be composed when the query will be called
@@ -122,7 +122,7 @@ namespace CLinq
                                                                                      T8 param8,
                                                                                      T9 param9,
                                                                                      T10 param10)
-            => expression.Compile()(param1, param2, param3, param4, param5, param6, param7, param8, param9, param10);
+            => default;
 
         /// <summary>
         /// Marks an parametered expression for LinqOnSteroids, so that it will be composed when the query will be called
@@ -139,7 +139,7 @@ namespace CLinq
                                                                                           T9 param9,
                                                                                           T10 param10,
                                                                                           T11 param11)
-            => expression.Compile()(param1, param2, param3, param4, param5, param6, param7, param8, param9, param10, param11);
+            => default;
 
         /// <summary>
         /// Marks an parametered expression for LinqOnSteroids, so that it will be composed when the query will be called
@@ -157,7 +157,7 @@ namespace CLinq
                                                                                                T10 param10,
                                                                                                T11 param11,
                                                                                                T12 param12)
-            => expression.Compile()(param1, param2, param3, param4, param5, param6, param7, param8, param9, param10, param11, param12);
+            => default;
 
         /// <summary>
         /// Marks an parametered expression for LinqOnSteroids, so that it will be composed when the query will be called
@@ -177,7 +177,7 @@ namespace CLinq
             T11 param11,
             T12 param12,
             T13 param13)
-            => expression.Compile()(param1, param2, param3, param4, param5, param6, param7, param8, param9, param10, param11, param12, param13);
+            => default;
 
         /// <summary>
         /// Marks an parametered expression for LinqOnSteroids, so that it will be composed when the query will be called
@@ -198,7 +198,7 @@ namespace CLinq
             T12 param12,
             T13 param13,
             T14 param14)
-            => expression.Compile()(param1, param2, param3, param4, param5, param6, param7, param8, param9, param10, param11, param12, param13, param14);
+            => default;
 
         /// <summary>
         /// Marks an parametered expression for LinqOnSteroids, so that it will be composed when the query will be called
@@ -220,7 +220,7 @@ namespace CLinq
             T13 param13,
             T14 param14,
             T15 param15)
-            => expression.Compile()(param1, param2, param3, param4, param5, param6, param7, param8, param9, param10, param11, param12, param13, param14, param15);
+            => default;
 
         /// <summary>
         /// Marks an parametered expression for LinqOnSteroids, so that it will be composed when the query will be called
@@ -243,7 +243,7 @@ namespace CLinq
             T14 param14,
             T15 param15,
             T16 param16)
-            => expression.Compile()(param1, param2, param3, param4, param5, param6, param7, param8, param9, param10, param11, param12, param13, param14, param15, param16);
+            => default;
 
         /// <summary>
         /// Makes a query composable, which allows to pass it dynamic parameters which are evaluated before execution
